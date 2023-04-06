@@ -2,8 +2,12 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 class PostQuerySet(models.QuerySet):
+
+
     def popular(self):
         return self.annotate(models.Count('likes')).order_by('-likes__count')
+
+
     def fetch_with_comments_count(self):
         """Allows to avoid increase of database queries in case of using multiple annotate() methods"""
         post_ids = [post.id for post in self]
@@ -13,9 +17,13 @@ class PostQuerySet(models.QuerySet):
         for post in self:
             post.comments__count = count_for_id[post.id]
         return list(self)
+
+
 class TagQuerySet(models.QuerySet):
     def popular(self):
         return self.annotate(models.Count('posts')).order_by('-posts__count')
+
+
 class Post(models.Model):
     title = models.CharField('Заголовок', max_length=200)
     text = models.TextField('Текст')
