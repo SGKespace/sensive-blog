@@ -1,12 +1,12 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
-class PostQuerySet(models.QuerySet):
 
+
+class PostQuerySet(models.QuerySet):
 
     def popular(self):
         return self.annotate(models.Count('likes')).order_by('-likes__count')
-
 
     def fetch_with_comments_count(self):
         """Allows to avoid increase of database queries in case of using multiple annotate() methods"""
@@ -74,6 +74,7 @@ class Tag(models.Model):
 
     def clean(self):
         self.title = self.title.lower()
+
     def get_absolute_url(self):
         return reverse('tag_filter', args={'tag_title': self.slug})
 
