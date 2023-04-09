@@ -55,7 +55,7 @@ def post_detail(request, slug):
 
     comments = Comment.objects.all().prefetch_related("author")
 
-    post = posts.get(slug=slug)
+    post = get_object_or_404(posts, slug=slug)
     serialized_post = {
         "title": post.title,
         "text": post.text,
