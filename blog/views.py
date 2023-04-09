@@ -50,9 +50,9 @@ def post_detail(request, slug):
     posts = Post.objects.popular().prefetch_related("author", "comments")
     most_popular_posts = posts[:5].fetch_with_comments_count()
 
-    comments = Comment.objects.all().prefetch_related("author")
-
     post = get_object_or_404(posts, slug=slug)
+    comments = post.comments.select_related('author')
+
     serialized_post = {
         "title": post.title,
         "text": post.text,
